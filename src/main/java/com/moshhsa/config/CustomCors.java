@@ -1,4 +1,4 @@
-package com.lookup.lookup;
+package com.moshhsa.config;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;

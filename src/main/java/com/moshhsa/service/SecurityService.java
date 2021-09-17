@@ -1,0 +1,12 @@
+package com.moshhsa.service;
+
+import com.moshhsa.entites.User;
+import com.moshhsa.exception.AuthenticationFailureException;
+import com.moshhsa.model.AuthenticationRequest;
+import com.moshhsa.model.AuthenticationResponse;
+import com.moshhsa.model.UserModel;
+
+public interface SecurityService {
+    AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest) throws AuthenticationFailureException;
+    User registerUser(UserModel user);
+}
