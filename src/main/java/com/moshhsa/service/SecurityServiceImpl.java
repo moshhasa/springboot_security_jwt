@@ -25,7 +25,7 @@ import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
-public class SecurityServiceImpl implements SecurityService{
+public class SecurityServiceImpl implements SecurityService {
 
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtil jwtTokenUtil;
@@ -52,8 +52,11 @@ public class SecurityServiceImpl implements SecurityService{
 
     @Override
     public AuthenticationResponse updatePassword(PasswordRequest passwordRequest) throws SecurityException, ResourceNotFoundException {
-        final User user = userRepository.findById(passwordRequest.getUserId())
-                .orElseThrow(() -> new ResourceNotFoundException("User not Found"));
+        final String username = jwtTokenUtil.extractUsername(passwordRequest.getToken());
+        final User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new ResourceNotFoundException("User not Found");
+        }
 
         if (!bcryptEncoder.matches(passwordRequest.getOldPassword(), user.getPassword())) {
             throw new SecurityException("you've entered an incorrect password");
@@ -77,7 +80,7 @@ public class SecurityServiceImpl implements SecurityService{
             throw new AuthenticationFailureException(messageResource.getMessage("account.suspended"));
         } catch (BadCredentialsException e) {
             throw new AuthenticationFailureException(messageResource.getMessage("invalid.credentials"));
-        } catch (Exception e ){
+        } catch (Exception e) {
             throw new AuthenticationFailureException(messageResource.getMessage("authentication.failure"));
         }
     }
