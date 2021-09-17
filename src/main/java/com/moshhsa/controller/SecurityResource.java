@@ -4,6 +4,7 @@ import com.moshhsa.entites.User;
 import com.moshhsa.exception.AuthenticationFailureException;
 import com.moshhsa.model.AuthenticationRequest;
 import com.moshhsa.model.AuthenticationResponse;
+import com.moshhsa.model.PasswordRequest;
 import com.moshhsa.model.UserModel;
 import com.moshhsa.service.SecurityService;
 import lombok.RequiredArgsConstructor;
@@ -12,19 +13,24 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api")
 public class SecurityResource {
 
 	private final SecurityService securityService;
 
 	@PostMapping(value = "/authenticate")
-	public ResponseEntity<AuthenticationResponse> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest)
+	public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest authenticationRequest)
 			throws AuthenticationFailureException {
 		return ResponseEntity.ok(securityService.authenticate(authenticationRequest));
 	}
 
 	@PostMapping(value = "/register")
-	public ResponseEntity<User> saveUser(@RequestBody UserModel user) {
+	public ResponseEntity<AuthenticationResponse> registerUser(@RequestBody UserModel user) {
 		return ResponseEntity.ok(securityService.registerUser(user));
 	}
 
+	@PostMapping(value = "/change-password")
+	public ResponseEntity<AuthenticationResponse> updatePassword(@RequestBody PasswordRequest passwordRequest) {
+		return ResponseEntity.ok(securityService.updatePassword(passwordRequest));
+	}
 }
