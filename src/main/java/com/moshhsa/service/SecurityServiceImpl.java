@@ -51,11 +51,11 @@ public class SecurityServiceImpl implements SecurityService {
 
 
     @Override
-    public AuthenticationResponse updatePassword(PasswordRequest passwordRequest) throws SecurityException, ResourceNotFoundException {
+    public AuthenticationResponse updatePassword(PasswordRequest passwordRequest) throws SecurityException {
         final String username = jwtTokenUtil.extractUsername(passwordRequest.getToken());
         final User user = userRepository.findByUsername(username);
         if (user == null) {
-            throw new ResourceNotFoundException("User not Found");
+            throw new SecurityException("Invalid token");
         }
 
         if (!bcryptEncoder.matches(passwordRequest.getOldPassword(), user.getPassword())) {

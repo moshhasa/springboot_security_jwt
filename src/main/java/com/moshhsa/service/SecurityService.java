@@ -13,5 +13,5 @@ public interface SecurityService {
 
     AuthenticationResponse registerUser(UserModel user);
 
-    AuthenticationResponse updatePassword(PasswordRequest passwordRequest) throws SecurityException, ResourceNotFoundException;
+    AuthenticationResponse updatePassword(PasswordRequest passwordRequest) throws SecurityException;
 }

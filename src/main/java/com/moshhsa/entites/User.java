@@ -16,7 +16,7 @@ public class User extends BaseEntity{
     @JsonIgnore
     private String password;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
     public String getUsername() {
