@@ -7,9 +7,12 @@ import com.moshhsa.model.AuthenticationResponse;
 import com.moshhsa.model.PasswordRequest;
 import com.moshhsa.model.UserModel;
 import com.moshhsa.service.SecurityService;
+import com.moshhsa.util.HttpUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,7 +33,9 @@ public class SecurityResource {
 	}
 
 	@PostMapping(value = "/change-password")
-	public ResponseEntity<AuthenticationResponse> updatePassword(@RequestBody PasswordRequest passwordRequest) {
+	public ResponseEntity<AuthenticationResponse> updatePassword(@RequestBody PasswordRequest passwordRequest,
+																 HttpServletRequest request) {
+		passwordRequest.setToken(HttpUtil.extractTokenFromRequest(request));
 		return ResponseEntity.ok(securityService.updatePassword(passwordRequest));
 	}
 }
